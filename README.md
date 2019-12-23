@@ -1,68 +1,126 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Single page app: vanilla JS(frontend) + JSON REST API with mongo & express(backend) 
 
-## Available Scripts
+### Created by
+View README.md of  https://github.com/darco2018/mustwatch-REST-API-mongo-express to see how the backend API part was created.
+```sh
+$ mkdir app
+$ cd app
+$ git clone https://github.com/darco2018/mustwatch-REST-API-mongo-express-JSfrontend.git
+$ mv mustwatch-REST-API-mongo-express-JSfrontend rest-api
+$ cd rest-api
+$ rm -fr .git
+$ npm i
+$ cd ..
+$ npx create-react-app react-frontend
+```  
+- create **/views/index.html**
+- ###### go to the INSTALLATION section down below & choose one-server or two-server option
 
-In the project directory, you can run:
 
-### `npm start`
+- **MONGO**
+  - install mongo & mongo CLI on your machine
+  - start mongo demon & mongo:
+  
+```sh
+$ sudo service mongod start/status/stop
+$ mongo
+```
+ - uncomment dbTest.test(mongoose) in app.js & check it's working
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Time saving tips
+   - when fetching all the movies, note that what is returned from res.json() is not an array but **{**movies: Array(1)**}**. To get the movies you have to **res.json().movies**
+   - nodemon restarts the server on changes but **doesn't** refresh the page in browser (use LIVE SERVER for hot reload)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Installation
 
-### `npm test`
+###### You can run frontend & backend on one server or on two servers. The benefit of using the latter option is **`HOT RELOAD`**.
+&NewLine;
+##### Single server, single port.
+###### Just Nodemon with the fronend & the backend at 3000.
+&NewLine;
+```sh
+$ npm i
+$ npm run debug
+// go to  http://localhost:3000/ & http://localhost:3000/api/movies
+$ sudo kill -9 $(sudo lsof -t -i:3000) // will stop the server
+```
+1. For the css & js links in your **index.html** use **relative paths to /public** folder, eg 
+<link rel="stylesheet" href="stylesheets/styles.css" >
+<script src="javascripts/index.js"></script>
+2. In **app.js**:
+app.use(express.static(path.join(__dirname + '/views'))); 
+app.use(express.static(path.join(__dirname, '/public')));
+3. in the **index route** change
+res.send to res.sendFile('index.html');
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#####  Two servers, two ports:
+###### Nodemon will take care of the backend at 3000. Live Server will deal with frontend at 5500.
+&NewLine;
+1. Backend the same as above but add the following line to **package.json**:
+"`norestart`": "nodemon ./bin/www --ignore '/*' " - it will prevent useless backend server reloads (You want to work on the fronend, don't you?!)
+&NewLine;
+```sh
+$ npm i 
+$ npm run norestart
+// go to  http://localhost:3000/ & http://localhost:3000/api/movies
+$ sudo kill -9 $(sudo lsof -t -i:3000) // will stop the server
+```
+2. For frontend install **LIVE SERVER in Visual Studio Code** & run it. 
+Your &nbsp; /views/index.html will be displayed at http://localhost:5500/views/. 
+3. For the css & js links in your **index.html** use **absolute paths**, eg 
+<link rel="stylesheet" href="/public/stylesheets/styles.css" >
+<script src="/public/javascripts/index.js"></script>
 
-### `npm run build`
+2. In **app.js**:
+// app.use(express.static(path.join(__dirname + '/views'))); 
+// app.use(express.static(path.join(__dirname, '/public')));
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Useful code snippets when using FETCH API
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```sh
+async function init() {
+    try {
+      const movies = await getMovies(fullUrl);
+      renderMovies(movies);
+    } catch (error) {
+      console.error(
+        'There has been a problem with your fetch operation: ' + error.message
+      );
+    }
+}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+async function getMovies(url = '') {
+    const res = await fetch(url, {
+      method: 'GET', // default
+      mode: 'cors', // default
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!res.ok) {
+      return handleErrors(res);
+    }
 
-### `npm run eject`
+    const json = await res.json(); // parses JSON response into native JavaScript objects
+    return json.movies;
+  }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newMovie) // body data type must match "Content-Type" header
+    });
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+ function handleErrors(res) {
+    if (res.status === 404) {
+      throw new Error('Ooops, page not found');
+    }
+    throw new Error(
+      res.statusText +
+        ' Network error (internet is down, or CORS is misconfigured on the server-side, or permission issues, etc.)'
+    );
+  }
