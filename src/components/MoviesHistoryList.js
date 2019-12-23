@@ -8,7 +8,7 @@ export default class MoviesHistoryList extends React.Component {
       <section id="history">
         <h2>Movies I have already watched</h2>
         <div style={{color: "white"}}>{movies}</div>
-        <ul id="historyList" class="list"></ul>
+        <ul id="historyList" className="list"></ul>
       </section>
     );
   }

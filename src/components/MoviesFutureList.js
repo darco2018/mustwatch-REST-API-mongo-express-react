@@ -8,7 +8,7 @@ export default class MoviesFutureList extends React.Component {
         <section id="future">
             <h2>Movies to watch in the future</h2>
             <div style={{color: "white"}}>{movies}</div>
-            <ul id="futureList" class="list">
+            <ul id="futureList" className="list">
             </ul>
         </section>      
     );
