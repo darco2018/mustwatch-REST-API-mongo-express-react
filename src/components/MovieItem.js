@@ -4,7 +4,7 @@ import "./MovieItem.css"
 
 function MovieItem({ _id, title, released, genre, rating,  }) {
   
-  const movieInfo = createMovieItem(_id, title, released, genre, rating)
+  const movieInfo = createMovieItem(_id, title,  genre, released, rating)
   return <strong>{movieInfo}</strong>;
 }
 
@@ -12,8 +12,8 @@ MovieItem.propTypes = {
   _id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   genre: PropTypes.string.isRequired,
-  rating: PropTypes.number.isRequired,
   released: PropTypes.number.isRequired,
+  rating: PropTypes.number.isRequired  
 };
 
 function createMovieItem(id, title, released, genre, rating ) {
