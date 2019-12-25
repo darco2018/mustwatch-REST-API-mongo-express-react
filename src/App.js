@@ -35,6 +35,13 @@ class App extends React.Component {
         const savedMovie = await postMovie(fullUrl, newMovie);
         futureList.appendChild(createMovieItem(savedMovie));
        */
+        let title = this.state.inputVal;
+        let newMovie = createMovie(title);
+        this.setState({
+          movies: [...this.state.movies, newMovie],
+          inputVal: ''
+        });
+        //
       } catch (error) {
         console.error(
           'There has been a problem with your fetch operation: ' + error.message
@@ -75,6 +82,17 @@ class App extends React.Component {
       </>
     );
   }
+}
+
+function createMovie(
+  title = '',
+  _id = Math.floor(Math.random() * Math.floor(10000)).toString(),
+  released = 0,
+  genre = '',
+  rating = 0,
+  isWatched = false
+) {
+  return { _id, title, released, genre, rating, isWatched };
 }
 
 const MOVIES = [
