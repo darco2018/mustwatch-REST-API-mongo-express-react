@@ -18,30 +18,42 @@ class App extends React.Component {
   async postMovie(fullUrl, newMovie) {
     console.log('posting movie');
   }
+  // -------------------------------
 
   handleInputChange = e => {
     this.setState({ inputVal: e.target.value });
   };
 
-  handleSubmit = e => {
-    var key = e.which || e.keyCode || 0;
+  // arrow function lets 'this' to get inside the function
+  handleIsWatched = id => {
+    console.log('is Watched: ' + id);
+    let movies = this.state.movies.map(movie =>
+      movie._id === id
+        ? Object.assign({}, movie, { isWatched: !movie.isWatched })
+        : movie
+    );
+    this.setState({
+      movies
+    });
+  };
 
-    if (key === 13) {
-      console.log('key 13');
+  handleNewMovie = e => {
+    var enterPressed = (e.which || e.keyCode || 0) === 13 ? true : false;
+
+    if (enterPressed) {
       try {
+        let title = this.state.inputVal;
+        let newMovie = createMovie(title);
+        this.setState({
+          movies: [newMovie, ...this.state.movies],
+          inputVal: ''
+        });
         /*  const movieTitle = titleInput.value;
         const newMovie = { title: movieTitle };
         titleInput.value = ''; 
         const savedMovie = await postMovie(fullUrl, newMovie);
         futureList.appendChild(createMovieItem(savedMovie));
-       */
-        let title = this.state.inputVal;
-        let newMovie = createMovie(title);
-        this.setState({
-          movies: [...this.state.movies, newMovie],
-          inputVal: ''
-        });
-        //
+       */ //
       } catch (error) {
         console.error(
           'There has been a problem with your fetch operation: ' + error.message
@@ -67,16 +79,18 @@ class App extends React.Component {
         <main>
           <MovieInput
             handleInputChange={this.handleInputChange}
-            handleSubmit={this.handleSubmit}
+            handleNewMovie={this.handleNewMovie}
             inputVal={this.state.inputVal}
           />
           <MoviesFutureList
             movies={this.state.movies}
             onDelete={this.handleDelete}
+            onWatched={this.handleIsWatched}
           />
           <MoviesHistoryList
             movies={this.state.movies}
             onDelete={this.handleDelete}
+            onWatched={this.handleIsWatched}
           />
         </main>
       </>
