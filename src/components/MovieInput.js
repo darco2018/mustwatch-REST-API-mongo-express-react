@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types"
+import "./MovieInput.css"
 
 
 export default class MovieInput extends Component {

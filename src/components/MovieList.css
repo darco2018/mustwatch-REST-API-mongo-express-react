@@ -1,0 +1,16 @@
+.list {    
+  list-style-type: none;
+  width: 800px;
+  margin: 0 auto;
+}
+
+li {
+  padding: 0 30px;
+  text-align: left;
+}
+
+li:hover {
+  background: rgb(53, 6, 6);
+  cursor: pointer;
+}
+
