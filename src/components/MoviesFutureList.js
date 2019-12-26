@@ -7,11 +7,14 @@ import './MovieList.css';
 export default function MoviesFutureList({ movies, onDelete, onWatched }) {
   const onClick = e => {
     const deleteBtnClicked = e.target.className.includes('deleteBtn');
-    if (!deleteBtnClicked) {
+    if (deleteBtnClicked) {
+      e.stopPropagation();
+      onDelete(e.target.id);
+    } else {
       onWatched(e.target.id);
     }
   };
-
+  // onDelete.bind(this, movie._id) is same as () => onDelete(movie._id)
   return (
     <section id="future">
       <h2>Movies to watch in the future</h2>
@@ -20,7 +23,7 @@ export default function MoviesFutureList({ movies, onDelete, onWatched }) {
           movie.isWatched ? null : (
             <li key={movie._id} id={movie._id} onClick={onClick}>
               <MovieItem {...movie} />
-              <DeleteBtn onDelete={() => onDelete(movie._id)} />
+              <DeleteBtn id={movie._id} onClick={onClick} />
             </li>
           )
         )}

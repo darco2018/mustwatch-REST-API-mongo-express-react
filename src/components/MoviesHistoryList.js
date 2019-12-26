@@ -6,8 +6,13 @@ import './MovieList.css';
 
 export default function MoviesHistoryList({ movies, onDelete, onWatched }) {
   const onClick = e => {
+    console.log('Click!');
+
     const deleteBtnClicked = e.target.className.includes('deleteBtn');
-    if (!deleteBtnClicked) {
+    if (deleteBtnClicked) {
+      e.stopPropagation();
+      onDelete(e.target.id);
+    } else {
       onWatched(e.target.id);
     }
   };
@@ -20,7 +25,7 @@ export default function MoviesHistoryList({ movies, onDelete, onWatched }) {
           movie.isWatched ? (
             <li key={movie._id} id={movie._id} onClick={onClick}>
               <MovieItem {...movie} />
-              <DeleteBtn onDelete={() => onDelete(movie._id)} />
+              <DeleteBtn id={movie._id} onClick={onClick} />
             </li>
           ) : null
         )}

@@ -11,9 +11,9 @@ function MovieItem({ _id, title, released, genre, rating,  }) {
 MovieItem.propTypes = {
   _id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  genre: PropTypes.string.isRequired,
-  released: PropTypes.number.isRequired,
-  rating: PropTypes.number.isRequired  
+  genre: PropTypes.string,
+  released: PropTypes.number,
+  rating: PropTypes.number  
 };
 
 function createMovieItem(id, title, released, genre, rating ) {
