@@ -72,7 +72,7 @@ $ npx create-react-app react-frontend
 
 ### Time saving tips
 
-- when
+- use arrow functions to avoid issues with 'this'
 
 ### Useful code snippets when using REACT
 
